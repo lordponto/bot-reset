@@ -1,52 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Bot</title>
+  <title>Bot Reset System</title>
   <style>
-    body { font-family: Arial; text-align: center; padding: 50px; background: #f4f4f4; }
-    button { padding: 15px 30px; font-size: 18px; background: #d32f2f; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 60px; background: #f8f9fa; }
+    h1 { color: #333; }
+    input { padding: 12px; width: 280px; font-size: 16px; margin: 15px 0; border: 2px solid #999; border-radius: 6px; }
+    button { padding: 14px 50px; font-size: 18px; background: #c62828; color: white; border: none; border-radius: 6px; cursor: pointer; }
     button:hover { background: #b71c1c; }
-    input { padding: 10px; font-size: 16px; margin: 10px; width: 200px; }
-    #status { margin-top: 20px; font-weight: bold; }
+    #status { margin-top: 25px; font-size: 17px; min-height: 30px; }
   </style>
 </head>
 <body>
-  <h1>🔄 Reset do Bot</h1>
-  <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off">
+  <h1>Bot Reset System</h1>
+  <p>Authorized Access Only</p>
+  
+  <input type="password" id="senha" placeholder="Enter password" autocomplete="off">
   <br><br>
-  <button onclick="enviarReset()">Enviar Reset</button>
+  <button onclick="enviarReset()">SEND RESET</button>
   <div id="status"></div>
 
   <script>
-    async function enviarReset() {
-      const senha = document.getElementById('senha').value;
-      const status = document.getElementById('status');
+    const ENDPOINT = 'https://noted-concepts-investing-switches.trycloudflare.com/reset';
+    const SECRET_TOKEN = 'k9Xv7mPq2wE9rT5yU8iO3l';   // Deve bater com o servidor
 
-      if (!senha) {
-        status.innerHTML = '<span style="color:red">Digite a senha!</span>';
+    async function enviarReset() {
+      const password = document.getElementById('senha').value.trim();
+      const statusEl = document.getElementById('status');
+
+      if (!password) {
+        statusEl.innerHTML = '<span style="color:red">Password is required</span>';
         return;
       }
 
-      status.innerHTML = 'Enviando...';
+      statusEl.innerHTML = 'Processing...';
 
       try {
-        const res = await fetch('https://noted-concepts-investing-switches.trycloudflare.com/reset', {
+        const res = await fetch(ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: senha })
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Reset-Token': SECRET_TOKEN
+          },
+          body: JSON.stringify({ password: password })
         });
 
         const data = await res.json();
-        
+
         if (res.ok) {
-          status.innerHTML = `<span style="color:green">✅ ${data.mensagem}</span>`;
+          statusEl.innerHTML = `<span style="color:green">✅ ${data.message}</span>`;
         } else {
-          status.innerHTML = `<span style="color:red">❌ ${data.mensagem}</span>`;
+          statusEl.innerHTML = `<span style="color:red">❌ ${data.message}</span>`;
         }
       } catch (e) {
-        status.innerHTML = '<span style="color:red">❌ Servidor não está rodando</span>';
+        statusEl.innerHTML = '<span style="color:red">❌ Connection failed. Server may be offline.</span>';
       }
     }
   </script>
