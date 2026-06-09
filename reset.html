@@ -23,8 +23,7 @@
   <div id="status"></div>
 
   <script>
-    const ENDPOINT = 'https://send-brings-instructions-numeric.trycloudflare.com/reset';
-    const SECRET_TOKEN = 'k9Xv7mPq2wE9rT5yU8iO3l';
+    const ENDPOINT = ' https://voice-survivor-loops-stress.trycloudflare.com/reset';
 
     async function enviarReset() {
       const password = document.getElementById('senha').value.trim();
@@ -41,31 +40,21 @@
         const res = await fetch(ENDPOINT, {
           method: 'POST',
           headers: { 
-            'Content-Type': 'application/json',
-            'X-Reset-Token': SECRET_TOKEN
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ password: password })
         });
 
-        const text = await res.text();
-        console.log("STATUS:", res.status);
-        console.log("RESPOSTA:", text);
+        const data = await res.json();
 
-        try {
-          const data = JSON.parse(text);
-
-          if (data.status === "success") {
-            statusEl.innerHTML = `<span style="color:green">${data.message}</span>`;
-          } else {
-            statusEl.innerHTML = `<span style="color:red">${data.message}</span>`;
-          }
-        } catch {
-          statusEl.innerHTML = `<span style="color:red">${text}</span>`;
+        if (data.status === "success") {
+          statusEl.innerHTML = `<span style="color:green">${data.message}</span>`;
+        } else {
+          statusEl.innerHTML = `<span style="color:red">${data.message}</span>`;
         }
 
       } catch (e) {
-        console.error(e);
-        statusEl.innerHTML = `<span style="color:red">Erro: ${e.message}</span>`;
+        statusEl.innerHTML = `<span style="color:red">Connection failed</span>`;
       }
     }
   </script>
