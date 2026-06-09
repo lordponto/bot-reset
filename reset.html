@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,18 +47,27 @@
           body: JSON.stringify({ password: password })
         });
 
-        const data = await res.json();
+        const text = await res.text();
+        console.log("STATUS:", res.status);
+        console.log("RESPOSTA:", text);
 
-        if (res.ok) {
-          statusEl.innerHTML = `<span style="color:green">${data.message}</span>`;
-        } else {
-          statusEl.innerHTML = `<span style="color:red">${data.message}</span>`;
+        try {
+          const data = JSON.parse(text);
+
+          if (data.status === "success") {
+            statusEl.innerHTML = `<span style="color:green">${data.message}</span>`;
+          } else {
+            statusEl.innerHTML = `<span style="color:red">${data.message}</span>`;
+          }
+        } catch {
+          statusEl.innerHTML = `<span style="color:red">${text}</span>`;
         }
+
       } catch (e) {
-        statusEl.innerHTML = '<span style="color:red">Connection failed. Server may be offline.</span>';
+        console.error(e);
+        statusEl.innerHTML = `<span style="color:red">Erro: ${e.message}</span>`;
       }
     }
   </script>
 </body>
 </html>
-```
