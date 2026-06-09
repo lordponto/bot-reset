@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,8 +24,8 @@
   <div id="status"></div>
 
   <script>
-    const ENDPOINT = 'https://allan-making-pathology-remote.trycloudflare.com/reset;
-    const SECRET_TOKEN = 'k9Xv7mPq2wE9rT5yU8iO3l';   // Deve bater com o servidor
+    const ENDPOINT = 'https://allan-making-pathology-remote.trycloudflare.com/reset';
+    const SECRET_TOKEN = 'k9Xv7mPq2wE9rT5yU8iO3l';
 
     async function enviarReset() {
       const password = document.getElementById('senha').value.trim();
@@ -50,14 +51,15 @@
         const data = await res.json();
 
         if (res.ok) {
-          statusEl.innerHTML = `<span style="color:green">✅ ${data.message}</span>`;
+          statusEl.innerHTML = `<span style="color:green">${data.message}</span>`;
         } else {
-          statusEl.innerHTML = `<span style="color:red">❌ ${data.message}</span>`;
+          statusEl.innerHTML = `<span style="color:red">${data.message}</span>`;
         }
       } catch (e) {
-        statusEl.innerHTML = '<span style="color:red">❌ Connection failed. Server may be offline.</span>';
+        statusEl.innerHTML = '<span style="color:red">Connection failed. Server may be offline.</span>';
       }
     }
   </script>
 </body>
 </html>
+```
