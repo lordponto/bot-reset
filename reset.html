@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Bot</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 50px; background: #f4f4f4; }
+    button { padding: 15px 30px; font-size: 18px; background: #d32f2f; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #b71c1c; }
+    input { padding: 10px; font-size: 16px; margin: 10px; width: 200px; }
+    #status { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🔄 Reset do Bot</h1>
+  <input type="password" id="senha" placeholder="Digite a senha" autocomplete="off">
+  <br><br>
+  <button onclick="enviarReset()">Enviar Reset</button>
+  <div id="status"></div>
+
+  <script>
+    async function enviarReset() {
+      const senha = document.getElementById('senha').value;
+      const status = document.getElementById('status');
+
+      if (!senha) {
+        status.innerHTML = '<span style="color:red">Digite a senha!</span>';
+        return;
+      }
+
+      status.innerHTML = 'Enviando...';
+
+      try {
+        const res = await fetch('https://noted-concepts-investing-switches.trycloudflare.com/reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: senha })
+        });
+
+        const data = await res.json();
+        
+        if (res.ok) {
+          status.innerHTML = `<span style="color:green">✅ ${data.mensagem}</span>`;
+        } else {
+          status.innerHTML = `<span style="color:red">❌ ${data.mensagem}</span>`;
+        }
+      } catch (e) {
+        status.innerHTML = '<span style="color:red">❌ Servidor não está rodando</span>';
+      }
+    }
+  </script>
+</body>
+</html>
